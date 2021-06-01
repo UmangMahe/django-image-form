@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <title>Internship Assessment 2</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    h2 {
+        color: #000000;
+        text-align: center;
+        margin-top: 30px;
+        font-family: Sans-serif;
+    }
+    
+    form {
+        max-width: 300px;
+        margin: auto;
+        margin-top: 50px;
+    }
+    
+    .btn {
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+</style>
+
+<body>
+
+    <div class="container">
+        <h2>Internship Assessment 2</h2>
+        <form id="form" , method="POST" , enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Image Name:</label>
+                <input type="text" class="form-control" placeholder="Image Name" name="image-name">
+            </div>
+            <div class="form-group">
+                <label>Image</label>:</label>
+                <input type="file" class="form-control" name="image" accept="image/png, image/jpeg">
+            </div>
+            <input type="submit" class="btn btn-primary" value="Create a Post" name="submit_ajax" onclick='submitajax()'>
+        </form>
+
+        <div id="output">
+
+        </div>
+    </div>
+    {% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        function submitajax() {
+            // catch the form's submit event
+            $('#form').submit(function(e) {
+                // create an AJAX call
+                $.ajax({
+                    data: new FormData(this), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    url: "{% url 'form' %}",
+                    processData: false,
+                    contentType: false,
+                    // on success
+                    success: function(response) {
+                        alert(response.msg);
+                        window.location.reload();
+                    },
+                    // on error
+                    error: function(response) {
+                        // alert the error if any error occured
+                        alert(response.responseJSON.errors);
+                        console.log(response.responseJSON.errors);
+                        window.location.reload();
+
+                    }
+                });
+                return false;
+
+            });
+        }
+    </script>
+    {% endblock javascript %}
+</body>
+
+</html>
